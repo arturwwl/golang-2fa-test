@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>2FA Test</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+</head>
+<body>
+
+<div class="container">
+    <div class="col-md-6">
+        <h2>Generate 2FA QRCODE</h2>
+        <form id="qr-generate">
+            <div class="form-group">
+                <label for="email">Email:</label>
+                <input type="email" class="form-control" id="email-generate" placeholder="Enter email" name="email">
+            </div>
+            <button type="submit" class="btn btn-default">Generate</button>
+        </form>
+        <object id="qr" data="">
+
+        </object>
+    </div>
+
+    <div class="col-md-6">
+        <h2>Check generated code</h2>
+        <form id="check">
+            <div class="form-group">
+                <label for="email">Email:</label>
+                <input type="email" class="form-control" id="email" placeholder="Enter email" name="email">
+            </div>
+            <div class="form-group">
+                <label for="code">Code:</label>
+                <input type="text" class="form-control" id="code" placeholder="Enter code" name="code">
+            </div>
+            <button type="submit" class="btn btn-default">Submit</button>
+        </form>
+    </div>
+</div>
+
+</body>
+<script>
+    $('#qr-generate').on("submit", function (e){
+        e.preventDefault();
+        e.stopPropagation();
+
+        const email = $('#email-generate').val();
+        $('#qr').attr("data", `http://127.0.0.1:1122/qr/${email}`)
+    })
+
+    $('#check').on("submit", function (e){
+        e.preventDefault();
+        e.stopPropagation();
+        const email = $('#email').val();
+        const code = $('#code').val();
+        $.get(`http://127.0.0.1:1122/confirm/${email}/${code}`, function( data ) {
+            alert(data);
+        })
+    })
+</script>
+</html>
